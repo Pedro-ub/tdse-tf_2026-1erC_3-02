@@ -48,43 +48,25 @@ Se desarrolló un sistema embebido de reflejos tipo "Whack-A-Mole" basado en una
 Esta memoria documenta los requisitos, el diseño de hardware y firmware, los ensayos realizados (WCET, factor de uso de CPU, consumo, memoria utilizada) y el estado de cumplimiento de los requisitos originales.
 
 ---
-
 # Registro de versiones
-
+ 
 | Revisión | Cambios realizados | Fecha |
 | :---: | --- | :---: |
-| 0.1 | Esqueleto inicial de memoria (esta entrega) | 18/07/2026 |
-| 1.0 | Memoria completa con mediciones de WCET, factor de uso de CPU, memoria y consumo parcial  | 09/08/2026 |
-
+| 0.1 | Esqueleto inicial de memoria | 18/07/2026 |
+| 1.0 | Memoria completa con mediciones de WCET, factor de uso de CPU, memoria y consumo parcial | 09/08/2026 |
+| 1.1 | Consumo completo (5 escenarios, con y sin bajo consumo), comparación con productos comerciales, tabla de requisitos ajustados, corrección de inconsistencias de pinout | 09/08/2026 |
+ 
 <em>Tabla 0.1 — Registro de versiones del documento.</em>
+ 
 
 ---
 
 # Índice general
 
 - [Capítulo 1: Introducción general](#capítulo-1-introducción-general)
-  - [1.1. Selección del proyecto a implementar](#11-selección-del-proyecto-a-implementar)
-  - [1.2. Proyectos similares](#12-proyectos-similares)
-  - [1.3. Justificación del enfoque técnico](#13-justificación-del-enfoque-técnico)
-  - [1.4. Alcance y limitaciones](#14-alcance-y-limitaciones)
 - [Capítulo 2: Introducción específica](#capítulo-2-introducción-específica)
-  - [2.1. Requisitos](#21-requisitos)
-  - [2.2. Casos de uso](#22-casos-de-uso)
-  - [2.3. Descripción de módulos principales](#23-descripción-de-módulos-principales)
 - [Capítulo 3: Diseño e implementación](#capítulo-3-diseño-e-implementación)
-  - [3.1. Hardware](#31-hardware)
-  - [3.2. Firmware](#32-firmware)
 - [Capítulo 4: Ensayos y resultados](#capítulo-4-ensayos-y-resultados)
-  - [4.1. Pruebas funcionales de hardware](#41-pruebas-funcionales-de-hardware)
-  - [4.2. Pruebas funcionales de firmware](#42-pruebas-funcionales-de-firmware)
-  - [4.3. Pruebas de integración](#43-pruebas-de-integración)
-  - [4.4. Circuito esquemático y cableado](#44-circuito-esquemático-y-cableado)
-  - [4.5. Console and Build Analyzer](#45-console-and-build-analyzer)
-  - [4.6. Medición y análisis de WCET por tarea](#46-medición-y-análisis-de-wcet-por-tarea)
-  - [4.7. Cálculo del factor de uso de CPU (U)](#47-cálculo-del-factor-de-uso-de-cpu-u)
-  - [4.8. Medición y análisis de consumo](#48-medición-y-análisis-de-consumo)
-  - [4.9. Cumplimiento de requisitos](#49-cumplimiento-de-requisitos)
-  - [4.10. Comparación con sistemas similares](#410-comparación-con-sistemas-similares)
 - [Capítulo 5: Conclusiones](#capítulo-5-conclusiones)
 - [Capítulo 6: Uso de herramientas de IA](#capítulo-6-uso-de-herramientas-de-ia)
 - [Capítulo 7: Bibliografía y referencias](#capítulo-7-bibliografía-y-referencias)
@@ -413,7 +395,25 @@ stateDiagram-v2
 [PENDIENTE: video breve del trabajo final funcionando — **obligatorio para la entrega final**, con link a YouTube o similar.]
 
 ## 4.4. Circuito esquemático y cableado
-[PENDIENTE: esquemático eléctrico completo y fotos del cableado/montaje final, siguiendo el estilo de figuras usado en "A Beginner's Guide to Designing Embedded System Applications on Arm Cortex-M Microcontroller".]
+![Esquemático eléctrico](./tp_embebidos/circuito_esquematico.png)
+ 
+<em>Figura 4.1 — Esquemático eléctrico del sistema completo.</em>
+ 
+![Vista de frente de la placa soldada](./tp_embebidos/frente.jpeg)
+ 
+<em>Figura 4.2 — Vista de frente de la placa base soldada.</em>
+ 
+![Vista de atrás de la placa soldada](./tp_embebidos/atras.jpeg)
+ 
+<em>Figura 4.3 — Vista de atrás de la placa base soldada (cableado).</em>
+ 
+![Placa montada como shield sobre la Nucleo](./tp_embebidos/shield.jpeg)
+ 
+<em>Figura 4.4 — Placa base montada como shield sobre los conectores Morpho de la NUCLEO-F103RB.</em>
+ 
+![Sistema completo con LCD y HM-10 conectados](./tp_embebidos/completo.jpeg)
+ 
+<em>Figura 4.5 — Sistema completo integrado, con el display LCD y el módulo HM-10 conectados vía headers soldados.</em>
 
 ## 4.5. Console and Build Analyzer
 Uso de memoria del build final (STM32F103RB: 128 KB FLASH, 20 KB RAM):
@@ -530,7 +530,12 @@ Leyenda: ✅ cumplido · 🟡 parcial, con justificación · 🔴 pendiente
 # Capítulo 5: Conclusiones
 
 ## 5.1. Resultados obtenidos
-[PENDIENTE — completar al cierre del trabajo.]
+ 
+Se logró un prototipo funcional completo del sistema "Whack-A-Mole", cumpliendo la totalidad de los requisitos obligatorios de hardware y programación de la propuesta original, con dos decisiones de diseño justificadas dentro de lo permitido por el enunciado (almacenamiento en flash interna en lugar de EEPROM externa, y módulo Bluetooth Low Energy en lugar de clásico). El sistema integra lógica de juego completa con tres niveles de dificultad, persistencia de ranking, ajuste automático de brillo por sensor de luz, display LCD, comunicación bidireccional con una aplicación móvil propia, y un modo de bajo consumo con reducción de energía cuantificada de forma consistente en los cinco escenarios de operación evaluados.
+ 
+El desarrollo permitió aplicar en profundidad los conceptos de la materia — arquitectura bare metal orientada a eventos, manejo de interrupciones, PWM, ADC, comunicación serie e I2C, máquinas de estado y gestión de energía — además de enfrentar y resolver problemas reales de integración de hardware (conflictos de configuración de timers y reloj, condiciones de carrera en periféricos, fallas de soldadura) que no se manifiestan al trabajar solo a nivel de simulación o teoría.
+ 
+La arquitectura modular adoptada facilitó la incorporación incremental de cada subsistema sin comprometer la estabilidad de lo ya construido, resultado que se refleja en el bajo factor de uso de CPU medido (≈10.56%) y el amplio margen de memoria disponible (≈16% FLASH, ≈15% RAM) sobre la capacidad total del microcontrolador.
 
 ## 5.2. Lecciones aprendidas
 - La configuración del árbol de reloj (PLL, prescalers) en el STM32F1 afecta simultáneamente a múltiples periféricos (timers, ADC) — un ajuste puntual para resolver un conflicto (ej. el prescaler del ADC) puede alterar sin querer el reloj base de otros periféricos ya calibrados (el buzzer, en este caso), por lo que conviene revisar el árbol completo tras cualquier cambio.
