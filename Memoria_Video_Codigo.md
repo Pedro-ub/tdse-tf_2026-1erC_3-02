@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./img/Logo-FIUBA.png" alt="Logo FIUBA">
+  <img src="./tp_embebidos/logo fiuba.png" alt="Logo FIUBA">
 </p>
 
 # Memoria del trabajo final: "Whack-A-Mole" — Juego Electrónico de Reflejos y Objetivos Aleatorios
@@ -47,27 +47,79 @@ Esta memoria documenta los requisitos, el diseño de hardware y firmware, los en
 
 # Registro de versiones
  
+A continuación, la Tabla 0.1 resume el historial de revisiones de este documento.
+ 
+<em>Tabla 0.1 — Registro de versiones del documento, con la fecha y el contenido incorporado en cada revisión.</em>
+ 
 | Revisión | Cambios realizados | Fecha |
 | :---: | --- | :---: |
 | 0.1 | Esqueleto inicial de memoria | 18/07/2026 |
 | 1.0 | Memoria completa con mediciones de WCET, factor de uso de CPU, memoria y consumo parcial | 09/08/2026 |
 | 1.1 | Consumo completo (5 escenarios, con y sin bajo consumo), comparación con productos comerciales, tabla de requisitos ajustados, video de integración, imágenes de esquemático y placa soldada | 09/08/2026 |
 | 1.2 | Corrección de inconsistencias (numeración duplicada, contenido obsoleto), documentación honesta del uso de cables Dupont en LCD/HM-10 | 09/08/2026 |
- 
-<em>Tabla 0.1 — Registro de versiones del documento.</em>
+| 1.3 | Índice completo con subsecciones, corrección de logo roto, eliminación de contenido obsoleto remanente | 09/08/2026 |
+| 1.4 | Corrección de formato de figuras y tablas según pautas de la cátedra (epígrafes de tabla arriba, referencia previa en el texto, figuras de productos comerciales) | 09/08/2026 |
  
 
 ---
-
 # Índice general
 
 - [Capítulo 1: Introducción general](#capítulo-1-introducción-general)
+  - [1.1. Selección del proyecto a implementar](#11-selección-del-proyecto-a-implementar)
+    - [1.1.1. Objetivo del proyecto y resultados esperados](#111-objetivo-del-proyecto-y-resultados-esperados)
+    - [1.1.2. Productos comerciales disponibles](#112-productos-comerciales-disponibles)
+    - [1.1.3. Comparación con el prototipo desarrollado](#113-comparación-con-el-prototipo-desarrollado)
+    - [1.1.4. Comparación de alternativas de diseño propio](#114-comparación-de-alternativas-de-diseño-propio)
+  - [1.2. Justificación del enfoque técnico](#12-justificación-del-enfoque-técnico)
+  - [1.3. Alcance y limitaciones](#13-alcance-y-limitaciones)
 - [Capítulo 2: Introducción específica](#capítulo-2-introducción-específica)
+  - [2.1. Requisitos](#21-requisitos)
+    - [2.1.1 Cambios de requisitos durante la realización del trabajo](#211-cambios-de-requisitos-durante-la-realización-del-trabajo)
+  - [2.2. Casos de uso](#22-casos-de-uso)
+    - [2.2.1 El usuario juega una partida en modo NORMAL](#221-el-usuario-juega-una-partida-en-modo-normal)
+    - [2.2.2 El usuario consulta o reinicia el ranking](#222-el-usuario-consulta-o-reinicia-el-ranking)
+    - [2.2.3 El usuario configura la dificultad vía Bluetooth](#223-el-usuario-configura-la-dificultad-vía-bluetooth)
+  - [2.3. Descripción de módulos principales](#23-descripción-de-módulos-principales)
 - [Capítulo 3: Diseño e implementación](#capítulo-3-diseño-e-implementación)
+  - [3.1. Hardware](#31-hardware)
+    - [3.1.1. Placa con microcontrolador](#311-placa-con-microcontrolador)
+    - [3.1.2. Botones](#312-botones)
+    - [3.1.3. LEDs](#313-leds)
+    - [3.1.4. Buzzer](#314-buzzer)
+    - [3.1.5. DIP switches](#315-dip-switches)
+    - [3.1.6. Sensor LDR](#316-sensor-ldr)
+    - [3.1.7 Display LCD 1602A](#317-display-lcd-1602a)
+    - [3.1.8 Módulo Bluetooth HM-10](#318-módulo-bluetooth-hm-10)
+    - [3.1.9. Criterio de interconexión y montaje](#319-criterio-de-interconexión-y-montaje)
+    - [3.1.10. Pinout del sistema](#3110-pinout-del-sistema)
+  - [3.2. Firmware](#32-firmware)
+    - [3.2.1 Arquitectura de ejecución](#321-arquitectura-de-ejecución)
+    - [3.2.2 Scheduler y medición de tiempos](#322-scheduler-y-medición-de-tiempos)
+    - [3.2.3 Máquina de estados principal](#323-máquina-de-estados-principal)
+    - [3.2.4 Módulo de juego](#324-módulo-de-juego)
+    - [3.2.5 Módulo de menú](#325-módulo-de-menú)
+    - [3.2.6 Persistencia (flash interna)](#326-persistencia-flash-interna)
+    - [3.2.7 Sensor de luz y brillo](#327-sensor-de-luz-y-brillo)
+    - [3.2.8 Display LCD](#328-display-lcd)
+    - [3.2.9 Comunicación Bluetooth](#329-comunicación-bluetooth)
+    - [3.2.10 Bajo consumo](#3210-bajo-consumo)
 - [Capítulo 4: Ensayos y resultados](#capítulo-4-ensayos-y-resultados)
+  - [4.1. Pruebas funcionales de hardware](#41-pruebas-funcionales-de-hardware)
+  - [4.2. Pruebas funcionales de firmware](#42-pruebas-funcionales-de-firmware)
+  - [4.3. Pruebas de integración](#43-pruebas-de-integración)
+  - [4.4. Circuito esquemático y cableado](#44-circuito-esquemático-y-cableado)
+  - [4.5. Console and Build Analyzer](#45-console-and-build-analyzer)
+  - [4.6. Medición y análisis de WCET por tarea](#46-medición-y-análisis-de-wcet-por-tarea)
+  - [4.7. Cálculo del factor de uso de CPU (U)](#47-cálculo-del-factor-de-uso-de-cpu-u)
+  - [4.8. Medición y análisis de consumo](#48-medición-y-análisis-de-consumo)
+  - [4.9. Gestión de bajo consumo y justificación](#49-gestión-de-bajo-consumo-y-justificación)
+  - [4.10. Cumplimiento de requisitos](#410-cumplimiento-de-requisitos)
 - [Capítulo 5: Conclusiones](#capítulo-5-conclusiones)
+  - [5.1. Resultados obtenidos](#51-resultados-obtenidos)
+  - [5.2. Lecciones aprendidas](#52-lecciones-aprendidas)
+  - [5.3. Próximos pasos](#53-próximos-pasos)
 - [Capítulo 6: Uso de herramientas de IA](#capítulo-6-uso-de-herramientas-de-ia)
-- [Capítulo 7: Bibliografía y referencias](#capítulo-7-bibliografía-y-referencias)
+
 
 ---
 
@@ -92,11 +144,23 @@ Funcionalidades implementadas:
 - Modo de bajo consumo (Sleep) activo en cada vuelta del super-loop.
 
 ### 1.1.2. Productos comerciales disponibles
+
+
+En el mercado argentino y mundial existen productos relacionados con juegos de reflejos, tanto físicos como aplicaciones móviles. Como ejemplo de juguete electrónico comercial cerrado, sin conectividad ni selección de dificultad, se tomó el producto "Whac A Mole" de Mattel, disponible en Mercado Libre Argentina, ilustrado en la Figura 1.1.
  
-En el mercado argentino y mundial existen productos relacionados con juegos de reflejos, tanto físicos como aplicaciones móviles:
+![Juguete comercial Whac A Mole de Mattel](./tp_embebidos/producto_juguete_topo.jpg)
  
-- **Juguetes electrónicos tipo "golpea el topo"**: ofrecen una experiencia física con botones reales, pero son sistemas cerrados de lógica fija, sin conectividad, sin selección de dificultad y sin almacenamiento de puntajes.
-- **Aplicaciones móviles arcade de reflejos**: ofrecen gráficos avanzados y tablas de puntajes globales, pero eliminan por completo el componente físico de interactuar con botones y LEDs reales.
+<em>Figura 1.1 — Juguete electrónico comercial "Whac A Mole" (Mattel): ofrece botones físicos reales pero es un sistema cerrado de lógica fija, sin conectividad, sin selección de dificultad y sin almacenamiento de puntajes. Imagen tomada de la publicación del producto en Mercado Libre Argentina¹.</em>
+ 
+Como ejemplo del extremo opuesto — una solución sin ningún componente físico — se tomó la aplicación móvil "Whack a Mole: Tap it!", disponible en Google Play, ilustrada en la Figura 1.2.
+ 
+![Captura de la app móvil Whack a Mole: Tap it!](./tp_embebidos/producto_app_whackamole.png)
+ 
+<em>Figura 1.2 — Aplicación móvil comercial "Whack a Mole: Tap it!": ofrece gráficos e interacción por pantalla táctil, pero elimina por completo el componente físico de botones y LEDs reales. Imagen tomada de la ficha del producto en Google Play².</em>
+ 
+---
+¹ Fuente: https://juegos-juguetes.mercadolibre.com.ar/whac-a-mole-juego-para-pegarle-a-los-topos-de-mattel
+² Fuente: https://play.google.com/store/apps/details?id=com.lcyu.whackamole
   
 ### 1.1.3. Comparación con el prototipo desarrollado
  
@@ -104,7 +168,9 @@ A diferencia de ambas alternativas comerciales, este proyecto combina el compone
  
 ### 1.1.4. Comparación de alternativas de diseño propio
  
-Se compararon además tres alternativas de implementación propia: Whack-A-Mole avanzado con STM32, juego básico con Arduino UNO, y una aplicación móvil arcade sin hardware dedicado, evaluando disponibilidad de hardware, escalabilidad, experiencia de usuario, tiempo de implementación, costo e interés personal.
+Se compararon además tres alternativas de implementación propia: Whack-A-Mole avanzado con STM32, juego básico con Arduino UNO, y una aplicación móvil arcade sin hardware dedicado, evaluando disponibilidad de hardware, escalabilidad, experiencia de usuario, tiempo de implementación, costo e interés personal. Los resultados de esta comparación se resumen en la Tabla 1.1.
+ 
+<em>Tabla 1.1 — Comparación ponderada de las tres alternativas de diseño propio evaluadas, según seis criterios con su peso relativo (0-10) y el puntaje asignado a cada alternativa (0-100).</em>
  
 | Aspecto | Peso | STM32 Avanzado | Arduino Básico | App Móvil |
 |---|:---:|:---:|:---:|:---:|
@@ -115,9 +181,6 @@ Se compararon además tres alternativas de implementación propia: Whack-A-Mole 
 | Costo | 5 | 40 | 50 | 35 |
 | Interés personal | 8 | 80 | 56 | 56 |
 | **Total** | | **434** | **366** | **343** |
- 
-<em>Tabla 1.1 — Comparación de alternativas de diseño propio.</em>
- 
 
 ## 1.2. Justificación del enfoque técnico
 
@@ -151,7 +214,10 @@ Alcance implementado:
 
 ## 2.1. Requisitos
 
-La Tabla 2.1 resume los requisitos definidos para el proyecto, agrupados por área funcional.
+ 
+Los requisitos definidos para el proyecto, agrupados por área funcional, se resumen en la Tabla 2.1.
+ 
+<em>Tabla 2.1 — Requisitos del proyecto, agrupados por área funcional (versión final; ver Tabla 2.2 para los cambios respecto a la propuesta original).</em>
 
 | Grupo | ID | Descripción |
 |---|---|---|
@@ -172,25 +238,31 @@ La Tabla 2.1 resume los requisitos definidos para el proyecto, agrupados por ár
 | Arquitectura | 10.1 – 10.6 | Super-loop <1 ms, tick 1 ms, tareas no bloqueantes, FSM con interfaces, menú interactivo, periféricos por interrupción/DMA/polling no bloqueante. |
 | Hardware | 11.1 – 11.2 | Sin protoboard ni Dupont; placa base soldada en la entrega final. |
 
-<em>Tabla 2.1 — Requisitos del proyecto (versión completa en README del repositorio).</em>
+
 
 ### 2.1.1 Cambios de requisitos durante la realización del trabajo
  
-Durante el desarrollo, dos decisiones de hardware se apartaron de la implementación inicialmente prevista en la propuesta, dentro de lo permitido por el propio enunciado:
+Durante el desarrollo, algunas decisiones de hardware se apartaron de la implementación inicialmente prevista en la propuesta, dentro de lo permitido por el enunciado, y una se aparta parcialmente del requisito de montaje. La Tabla 2.2 resume estos cambios, documentados y justificados a continuación.
+ 
+<em>Tabla 2.2 — Cambios de requisitos respecto a la propuesta original, con el motivo de cada cambio.</em>
  
 | Aspecto | Previsto originalmente | Implementado | Motivo del cambio |
 |---|---|---|---|
 | Almacenamiento persistente | EEPROM externa por I2C | Flash interna del STM32 | El enunciado admite ambas opciones ("EEPROM externa **o** Flash interna"); se evitó la compra de un componente adicional y su bus I2C dedicado. |
 | Tipo de Bluetooth | No especificado en detalle | HM-10 (BLE 4.0) | El módulo adquirido resultó ser BLE, no Bluetooth clásico; se adaptó el protocolo de comunicación y la app (con extensión BluetoothLE de MIT App Inventor) en consecuencia. |
 | Uso del DIP switch | Selección de modo de operación (genérico) | Selección de dificultad inicial (2 canales) + modo demo (1 canal) + forzado de modo FALLA (1 canal) | Se definió un uso concreto para los 4 canales, alineado con el requisito 5.1 de "configuración inicial". |
-| Montaje de LCD y HM-10 (req. 11.1) | Sin protoboard ni Dupont | Conectados mediante cables Dupont a la placa base | Se priorizó la facilidad de reposicionar ambos módulos (el LCD para visibilidad, el HM-10 para alcance de antena) durante las pruebas finales de integración; el resto de los componentes (LEDs, botones, buzzer, DIP switch) sí quedaron soldados directamente a la placa base, según 3.1.9. |
-
+| Montaje de LCD y HM-10 (req. 11.1) | Sin protoboard ni Dupont | Conectados mediante cables Dupont a la placa base | Se priorizó la facilidad de reposicionar ambos módulos (el LCD para visibilidad, el HM-10 para ajustar su posición) durante las pruebas finales de integración; el resto de los componentes (LEDs, botones, buzzer, DIP switch) sí quedaron soldados directamente a la placa base, según 3.1.9. |
  
-<em>Tabla 2.2 — Cambios de requisitos respecto a la propuesta original.</em>
 
 ## 2.2. Casos de uso
 
+Se definieron tres casos de uso principales, detallados en las Tablas 2.3, 2.4 y 2.5.
+
 ### 2.2.1 El usuario juega una partida en modo NORMAL
+
+La Tabla 2.3 describe el flujo completo de una partida jugada en modo NORMAL, desde que se dispara hasta las alternativas posibles ante error o falla.
+ 
+<em>Tabla 2.3 — Caso de uso 1: el usuario juega una partida en modo NORMAL.</em>
  
 | Elemento | Definición |
 |---|---|
@@ -199,9 +271,11 @@ Durante el desarrollo, dos decisiones de hardware se apartaron de la implementac
 | Flujo principal | Se activa un objetivo aleatorio; el jugador presiona el botón correspondiente antes del timeout; por cada acierto sube el score y baja el timeout; al acumular errores finaliza la partida, se compara el score contra el ranking en flash y se transmite por Bluetooth. |
 | Alternativas | Timeout o botón incorrecto: resta una vida y continúa. Falla de hardware: transición a modo FALLA. |
  
-<em>Tabla 2.3 — Caso de uso 1.</em>
- 
 ### 2.2.2 El usuario consulta o reinicia el ranking
+
+La Tabla 2.4 describe el flujo de consulta y reinicio del ranking desde el submenú de SET_UP.
+ 
+<em>Tabla 2.4 — Caso de uso 2: el usuario consulta o reinicia el ranking.</em>
  
 | Elemento | Definición |
 |---|---|
@@ -209,10 +283,12 @@ Durante el desarrollo, dos decisiones de hardware se apartaron de la implementac
 | Precondiciones | Sistema en SET_UP, sin partida en curso. |
 | Flujo principal | Se muestran los 3 mejores puntajes en el LCD; el usuario puede confirmar el reinicio del ranking (con doble confirmación) o cancelar. |
 | Alternativas | Cancelación: se conserva el ranking. |
- 
-<em>Tabla 2.4 — Caso de uso 2.</em>
- 
+
 ### 2.2.3 El usuario configura la dificultad vía Bluetooth
+
+La Tabla 2.5 describe el flujo de configuración remota de dificultad desde la aplicación móvil.
+ 
+<em>Tabla 2.5 — Caso de uso 3: el usuario configura la dificultad vía Bluetooth.</em>
  
 | Elemento | Definición |
 |---|---|
@@ -220,11 +296,11 @@ Durante el desarrollo, dos decisiones de hardware se apartaron de la implementac
 | Precondiciones | Módulo HM-10 conectado a la app. |
 | Flujo principal | La app envía `DIFF:<0\|1\|2>`; el firmware lo recibe por interrupción UART, actualiza la dificultad activa, la persiste en flash y la muestra brevemente en el LCD. |
 | Alternativas | Comando inválido: se ignora sin efecto. |
- 
-<em>Tabla 2.5 — Caso de uso 3.</em>
 
 ## 2.3. Descripción de módulos principales
 
+El sistema se organiza en los módulos de control, entrada, salida, comunicación, lógica e interfaces que se detallan a continuación, cuya interconexión se ilustra en la Figura 2.1.
+ 
 ```mermaid
 flowchart TB
     STM32["NUCLEO-F103RB<br/>STM32F103RB"]
@@ -241,7 +317,7 @@ flowchart TB
     STM32 <-.->|Flash interna| FLASH["Ranking + Config<br/>(persistente)"]
 ```
  
-<em>Figura 2.1 — Diagrama en bloques del sistema.</em>
+<em>Figura 2.1 — Diagrama en bloques del sistema, mostrando el STM32 central y su interconexión con entradas (botones, DIP switch, LDR), salidas (LEDs, buzzer), comunicación (LCD vía I2C, HM-10 vía UART y BLE hacia la app), y persistencia en flash interna.</em>
  
 - **Módulo de control:** super-loop con tick de 1 ms (SysTick → callback) y scheduler cooperativo de tareas periódicas, con instrumentación de WCET y tiempo promedio vía `DWT->CYCCNT`.
 - **Módulo de entradas:** botones (antirrebote por FSM de 4 estados: UP/FALLING/DOWN/RISING), DIP switches (antirrebote análogo), sensor LDR (lectura por interrupción de ADC, sin modo continuo).
@@ -249,6 +325,7 @@ flowchart TB
 - **Módulo de comunicación:** LCD 1602A vía I2C (backpack PCF8574), HM-10 vía UART por interrupción.
 - **Módulo de lógica:** máquina de estados principal (`fsm.c`), lógica de juego (`game.c`), menú interactivo (`menu.c`), generador pseudoaleatorio (`random.c`), persistencia en flash (`storage.c`), bajo consumo (`low_power.c`).
 - **Módulo de interfaces:** cola de eventos genérica (`queue.c`) que desacopla las fuentes de eventos (botones, menú, fin de partida, Bluetooth, fallas) de la FSM consumidora.
+
 
 ---
 
@@ -263,7 +340,9 @@ Se utiliza una placa NUCLEO-F103RB (STM32F103RB, ARM Cortex-M3).
 Cuatro pulsadores, uno por objetivo/LED, reutilizados también para navegación del menú interactivo en modo SET_UP (requisito 10.5). Soldados directamente a la placa base.
 
 ### 3.1.3. LEDs
-Cuatro LEDs de objetivo, cada uno sobre un canal PWM de hardware distinto, para permitir el ajuste de brillo sin interferir con el buzzer. Soldados directamente a la placa base.
+Cuatro LEDs de objetivo, cada uno sobre un canal PWM de hardware distinto, para permitir el ajuste de brillo sin interferir con el buzzer. Soldados directamente a la placa base. La asignación de cada LED a su timer y canal, según el orden físico real en que quedaron soldados, se detalla en la Tabla 3.1.
+ 
+<em>Tabla 3.1 — Asignación de LEDs a canales PWM, en el orden físico real en que quedaron soldados en la placa base.</em>
  
 | LED | Pin | Timer/Canal |
 |---|---|---|
@@ -271,8 +350,6 @@ Cuatro LEDs de objetivo, cada uno sobre un canal PWM de hardware distinto, para 
 | led_1 | PB8 | TIM4_CH3 |
 | led_2 | PA7 | TIM1_CH1N |
 | led_3 | PB10 | TIM2_CH3 |
- 
-<em>Tabla 3.1 — Asignación de LEDs a canales PWM (orden físico real, tal como quedaron soldados en la placa base).</em>
  
 > Nota: el mapeo entre botón y LED percibido por el usuario se resuelve por software: el orden de las filas en `ledTable[]` (`leds.c`) se ajustó para reflejar el orden físico en que quedaron soldados los LEDs en la placa base, sin necesidad de recablear ni modificar `game.c`/`button.c` — cada campo de la estructura (`htim`, `channel`, `isComplementary`) se mantuvo intacto, solo se reordenaron las filas completas.
 
@@ -297,6 +374,10 @@ Placa base soldada (perfboard **doble faz**), con headers hacia los conectores M
 **Excepción documentada (desvío parcial del requisito 11.1):** el display LCD y el módulo HM-10 se conectan a la placa base mediante **cables Dupont**, no soldados. Esta decisión se tomó para poder reposicionar ambos componentes durante las pruebas finales de integración — el LCD para optimizar su visibilidad según el ángulo de exhibición, y el HM-10 para ajustar posicion. El resto del sistema (LEDs, botones, buzzer, DIP switch) cumple íntegramente el requisito de montaje soldado sin protoboard.
 
 ### 3.1.10. Pinout del sistema
+La asignación completa de pines utilizados en el sistema se detalla en la Tabla 3.2.
+ 
+<em>Tabla 3.2 — Pinout relevante del sistema, indicando función de cada pin y si el componente correspondiente quedó soldado a la placa o conectado mediante cables Dupont.</em>
+ 
 | Pin | Función |
 |---|---|
 | PB0 | LED objetivo 0 (TIM1_CH2N, PWM) |
@@ -312,8 +393,6 @@ Placa base soldada (perfboard **doble faz**), con headers hacia los conectores M
 | PA2/PA3 | USART2 (consola ST-Link VCP, 115200 baud) |
 | — | 4 botones de juego (GPIO input, pull-up), soldados |
 | PC12, PC10, PB5, PB4 | 4 canales DIP switch (GPIO input, pull-up interno, switch a GND), soldados |
- 
-<em>Tabla 3.2 — Pinout relevante del sistema.</em>
 
 ## 3.2. Firmware
 
@@ -325,7 +404,7 @@ Bare metal, Event-Triggered System. Super-loop en `main()` con `schedulerUpdate(
 `task_scheduler.c` ejecuta 9 tareas cada 1 ms (`appUpdate`, `buttonUpdate`, `buzzerUpdate`, `dipSwitchUpdate`, `gameUpdate`, `menuUpdate`, `ldrUpdate`, `bluetoothUpdate`, `lcdUpdate`), instrumentadas con `DWT->CYCCNT` para registrar tanto el WCET como un promedio móvil exponencial (`avgCycles`) por tarea (ver Capítulo 4).
  
 ### 3.2.3 Máquina de estados principal
-`fsm.c` implementa la FSM global mediante un array de estructuras `{estado, evento, acción, próximo_estado}` (requisito 10.4), con transiciones globales (comodín `FSM_ANY_STATE`) para fallas de hardware. Diagrama de estados:
+`fsm.c` implementa la FSM global mediante un array de estructuras `{estado, evento, acción, próximo_estado}` (requisito 10.4), con transiciones globales (comodín `FSM_ANY_STATE`) para fallas de hardware. El diagrama de estados se ilustra en la Figura 3.1.
  
 ```mermaid
 stateDiagram-v2
@@ -338,7 +417,7 @@ stateDiagram-v2
     FAULT --> SETUP: EVENT_BT_DATA_RX
 ```
  
-<em>Figura 3.1 — Diagrama de estados de la FSM principal.</em>
+<em>Figura 3.1 — Diagrama de estados de la FSM principal: INIT transiciona una única vez a SETUP; desde SETUP se pasa a NORMAL al iniciar una partida; desde NORMAL se vuelve a SETUP al finalizar la partida; una falla de hardware (EVENT_HW_FAULT) lleva a FAULT desde cualquier estado; desde FAULT se retorna a SETUP ante la recepción de datos por Bluetooth.</em>
  
 ### 3.2.4 Módulo de juego
 `game.c`: selección aleatoria de objetivo (`random.c`, xorshift32 resembrado con el tiempo real de reacción del jugador en cada acierto), timeout decreciente por dificultad (tabla `difficultyTable[]`), conteo de vidas y score, transmisión del score final por Bluetooth y persistencia en flash al finalizar.
@@ -366,9 +445,13 @@ stateDiagram-v2
 
 # Capítulo 4: Ensayos y resultados
 
-> Todas las subsecciones de este capítulo dependen de tener el hardware montado en la placa base definitiva y los módulos de EEPROM/Bluetooth/LDR terminados. Se dejan como placeholders a completar antes de la entrega final.
 
 ## 4.1. Pruebas funcionales de hardware
+ 
+Los ensayos funcionales de hardware realizados sobre el sistema completo se resumen en la Tabla 4.1.
+ 
+<em>Tabla 4.1 — Ensayos funcionales de hardware realizados y su estado de validación.</em>
+ 
 | Ensayo | Resultado | Estado |
 |---|---|:---:|
 | Continuidad de cableado (protoboard y placa soldada) | Validado progresivamente por subsistema | ✅ |
@@ -379,8 +462,12 @@ stateDiagram-v2
 | Módulo HM-10 (alimentación, TX/RX cruzado) | Confirmado con nRF Connect y app propia | ✅ |
 | Verificación de LEDs post-soldado | Se detectaron 2 LEDs dañados por sobrecalentamiento durante el soldado, verificados con multímetro en modo diodo y reemplazados | ✅ |
  
-<em>Tabla 4.1 — Ensayos funcionales de hardware.</em>
 ## 4.2. Pruebas funcionales de firmware
+ 
+Los ensayos funcionales de firmware realizados se resumen en la Tabla 4.2.
+ 
+<em>Tabla 4.2 — Ensayos funcionales de firmware realizados y su estado de validación.</em>
+ 
 | Ensayo | Resultado | Estado |
 |---|---|:---:|
 | Debounce de botones y DIP switch | Eventos limpios sobre la cola de la FSM | ✅ |
@@ -390,25 +477,27 @@ stateDiagram-v2
 | ADC por interrupción (sin DMA) | Migrado desde DMA tras diagnóstico de error de configuración; funcional | ✅ |
 | Comunicación BLE bidireccional | Score recibido y dificultad configurable desde app propia | ✅ |
 | Recuperación ante fallo de I2C | Mitigado con timeout reducido y reinicialización automática | ✅ |
-| Modo de bajo consumo (Sleep) | Integrado sin afectar respuesta de botones/LEDs | ✅ |
- 
-<em>Tabla 4.2 — Ensayos funcionales de firmware.</em>
+| Modo de bajo consumo (Sleep) | Integrado sin afectar respuesta de botones/LEDs; reducción cuantificada en 4.8 | ✅ |
 
 ## 4.3. Pruebas de integración
 Video de integración del sistema completo funcionando: https://youtu.be/2-QbApDpVpc?feature=shared
 
 ## 4.4. Circuito esquemático y cableado
+El esquemático eléctrico completo del sistema se ilustra en la Figura 4.1.
+ 
 ![Esquemático eléctrico](./tp_embebidos/circuito_esquematico.png)
  
-<em>Figura 4.1 — Esquemático eléctrico del sistema completo.</em>
+<em>Figura 4.1 — Esquemático eléctrico del sistema completo, mostrando el STM32 y su interconexión con LEDs, botones, buzzer, DIP switch, divisor LDR, backpack I2C del LCD y módulo HM-10.</em>
+ 
+El montaje físico de la placa base soldada se muestra en las Figuras 4.2 a 4.5: vista de frente, vista de atrás, montaje como shield sobre la Nucleo, y el sistema completo integrado.
  
 ![Vista de frente de la placa soldada](./tp_embebidos/frente.jpeg)
  
-<em>Figura 4.2 — Vista de frente de la placa base soldada.</em>
+<em>Figura 4.2 — Vista de frente de la placa base soldada, con los LEDs, botones, buzzer y DIP switch visibles.</em>
  
 ![Vista de atrás de la placa soldada](./tp_embebidos/atras.jpeg)
  
-<em>Figura 4.3 — Vista de atrás de la placa base soldada (cableado).</em>
+<em>Figura 4.3 — Vista de atrás de la placa base soldada, mostrando el cableado punto a punto y los rieles de alimentación.</em>
  
 ![Placa montada como shield sobre la Nucleo](./tp_embebidos/shield.jpeg)
  
@@ -416,10 +505,14 @@ Video de integración del sistema completo funcionando: https://youtu.be/2-QbApD
  
 ![Sistema completo con LCD y HM-10 conectados](./tp_embebidos/completo.jpeg)
  
-<em>Figura 4.5 — Sistema completo integrado, con el display LCD y el módulo HM-10 conectados vía cables Dupont.</em>
+<em>Figura 4.5 — Sistema completo integrado, con el display LCD y el módulo HM-10 conectados vía cables Dupont (ver justificación en 3.1.9).</em>
+ 
 
 ## 4.5. Console and Build Analyzer
-Uso de memoria del build final (STM32F103RB: 128 KB FLASH, 20 KB RAM):
+
+El uso de memoria del build final (STM32F103RB: 128 KB FLASH, 20 KB RAM) se detalla por sección en la Tabla 4.3.
+ 
+<em>Tabla 4.3 — Uso de memoria FLASH/RAM por sección del build final.</em>
  
 | Sección | Tamaño |
 |---|---:|
@@ -430,15 +523,13 @@ Uso de memoria del build final (STM32F103RB: 128 KB FLASH, 20 KB RAM):
 | `.bss` | 1.23 KB |
 | `._user_heap_stack` | 1.5 KB |
  
-- **FLASH usada:** ≈20.53 KB de 128 KB → **16.04%**
-- **RAM usada:** ≈3.01 KB de 20 KB → **15.05%**
-<em>Tabla 4.3 — Uso de memoria FLASH/RAM.</em>
- 
-Se observa un uso bajo de ambos recursos, dejando amplio margen para futuras extensiones — resultado comparable en magnitud al reportado por proyectos de referencia de la cátedra con alcance similar.
+A partir de estos valores: **FLASH usada** ≈20.53 KB de 128 KB (**16.04%**); **RAM usada** ≈3.01 KB de 20 KB (**15.05%**). Se observa un uso bajo de ambos recursos, dejando amplio margen para futuras extensiones — resultado comparable en magnitud al reportado por proyectos de referencia de la cátedra con alcance similar.
 
 ## 4.6. Medición y análisis de WCET por tarea
 
-Instrumentación mediante `DWT->CYCCNT` (contador de ciclos del núcleo), habilitado una vez en `schedulerInit()` (`CoreDebug->DEMCR` + `DWT->CTRL`). Cada tarea del scheduler mide su tiempo de ejecución en cada invocación, actualizando tanto el peor caso observado (WCET) como un promedio móvil exponencial (`Cavg`, ponderación 1/8 por muestra). Mediciones realizadas jugando partidas completas por las 3 dificultades, navegando el menú, cambiando dificultad por los 3 medios disponibles (menú, DIP switch, Bluetooth) y ejercitando el submenú de ranking, con el reloj de sistema confirmado en 64 MHz.
+Instrumentación mediante `DWT->CYCCNT` (contador de ciclos del núcleo), habilitado una vez en `schedulerInit()` (`CoreDebug->DEMCR` + `DWT->CTRL`). Cada tarea del scheduler mide su tiempo de ejecución en cada invocación, actualizando tanto el peor caso observado (WCET) como un promedio móvil exponencial (`Cavg`, ponderación 1/8 por muestra). Mediciones realizadas jugando partidas completas por las 3 dificultades, navegando el menú, cambiando dificultad por los 3 medios disponibles (menú, DIP switch, Bluetooth) y ejercitando el submenú de ranking, con el reloj de sistema confirmado en 64 MHz. Los resultados se resumen en la Tabla 4.4.
+ 
+<em>Tabla 4.4 — WCET y tiempo promedio (Cavg) por tarea del scheduler, en microsegundos.</em>
  
 | Tarea | Cavg típico [µs] | WCET máx. observado [µs] |
 |---|---:|---:|
@@ -451,8 +542,6 @@ Instrumentación mediante `DWT->CYCCNT` (contador de ciclos del núcleo), habili
 | `ldrUpdate` | 5.9 | 23.5 |
 | `bluetoothUpdate` | 4.7 | 110,117 |
 | `lcdUpdate` | 5.3 | 59,112 |
- 
-<em>Tabla 4.4 — WCET y tiempo promedio por tarea.</em>
  
 **Observaciones:**
  
@@ -477,7 +566,9 @@ El valor de operación típica (**≈10.56%**) indica un sistema con amplio marg
 ## 4.8. Medición y análisis de consumo
 **Metodología:** medición de corriente mediante jumper `JP6 (IDD)` de la NUCLEO-F103RB — punto específico entre el regulador de 3.3V y la alimentación del STM32, documentado en el manual UM1724 para este propósito — con multímetro en modo amperímetro intercalado en el jumper. No se realizó medición sobre el riel de 5V, dado que ningún componente del circuito lo utiliza (ver nota en 3.1.8). No se contó con acceso a un osciloscopio durante el desarrollo del trabajo, por lo que la medición de consumo se limitó a valores de corriente promedio/pico con multímetro; queda como trabajo pendiente la caracterización de la forma de onda de consumo (picos transitorios de corta duración, ej. al conmutar PWM o durante transmisiones Bluetooth puntuales) que solo un osciloscopio permite observar.
  
-Se midieron 5 escenarios de operación, cada uno con y sin el modo de bajo consumo activo (comentando/descomentando `lowPowerEnterIdle()` en el super-loop):
+Se midieron 5 escenarios de operación, cada uno con y sin el modo de bajo consumo activo (comentando/descomentando `lowPowerEnterIdle()` en el super-loop). Los resultados se resumen en la Tabla 4.5.
+ 
+<em>Tabla 4.5 — Consumo medido en los 5 escenarios de operación evaluados, con y sin modo de bajo consumo, sobre el riel de 3.3V.</em>
  
 | Modo | Con low power | Sin low power | Reducción |
 |---|---:|---:|---:|
@@ -486,9 +577,7 @@ Se midieron 5 escenarios de operación, cada uno con y sin el modo de bajo consu
 | SET_UP + Bluetooth conectado (sin transmitir) | 43.3 mA | 45.5 mA | 2.2 mA |
 | NORMAL + Bluetooth transmitiendo activamente | 44.1 mA | 46.1 mA | 2.0 mA |
 | FALLA (buzzer + LEDs activos) | 42.0 mA | 44.3 mA | 2.3 mA |
- 
-<em>Tabla 4.5 — Consumo medido en los 5 escenarios de operación, con y sin modo de bajo consumo.</em>
- 
+
 **Análisis:**
  
 - El peor caso medido fue **46.1 mA** (modo NORMAL con Bluetooth transmitiendo, sin bajo consumo), muy por debajo de los límites de corriente típicos del regulador de la placa de desarrollo.
@@ -504,6 +593,10 @@ El sistema implementa modo **Sleep** (`HAL_PWR_EnterSLEEPMode`, instrucción `WF
 Dado que el `schedulerUpdate()` tarda, en operación típica, una fracción mínima del período de 1 ms disponible (factor de uso ≈10.56%, sección 4.7), el núcleo permanece en Sleep la gran mayoría de cada ciclo. La medición de la sección 4.8 confirma una reducción real y consistente de **2.0 a 2.3 mA** en los 5 escenarios evaluados, sin alterar la respuesta percibida por el usuario (botones, LEDs y menú responden con igual fluidez con y sin el modo activo).
 
 ## 4.10. Cumplimiento de requisitos
+
+El grado de cumplimiento de cada requisito, discriminado por grupo, se resume en la Tabla 4.6.
+ 
+<em>Tabla 4.6 — Cumplimiento de requisitos, con leyenda de estados al pie.</em>
  
 | ID | Requisito | Estado |
 |---|---|:---:|
@@ -524,7 +617,6 @@ Dado que el `schedulerUpdate()` tarda, en operación típica, una fracción mín
 | 10.6 | Periféricos por interrupción/polling no bloqueante | ✅ |
 | 11.1–11.2 | Placa base soldada, sin protoboard/Dupont | 🟡 parcial — LEDs, botones, buzzer y DIP switch soldados; LCD y HM-10 conectados vía Dupont por facilidad de reposicionamiento durante pruebas finales (ver 3.1.9 y 2.1.1) |
  
-<em>Tabla 4.6 — Cumplimiento de requisitos.</em>
  
 Leyenda: ✅ cumplido · 🟡 parcial, con justificación · 🔴 pendiente
 
@@ -534,13 +626,13 @@ Leyenda: ✅ cumplido · 🟡 parcial, con justificación · 🔴 pendiente
 
 ## 5.1. Resultados obtenidos
  
-Se logró un prototipo funcional completo del sistema "Whack-A-Mole", cumpliendo la totalidad de los requisitos obligatorios de programación y la gran mayoría de los de hardware de la propuesta original, con decisiones de diseño justificadas (almacenamiento en flash interna en lugar de EEPROM externa, módulo Bluetooth Low Energy en lugar de clásico, y conexión de LCD/HM-10 mediante Dupont en lugar de soldadura, documentada como desvío parcial del requisito de montaje). El sistema integra lógica de juego completa con tres niveles de dificultad, persistencia de ranking, ajuste automático de brillo por sensor de luz, display LCD, comunicación bidireccional con una aplicación móvil propia, y un modo de bajo consumo con reducción de energía cuantificada de forma consistente en los cinco escenarios de operación evaluados.
+Se logró un prototipo funcional completo del sistema "Whack-A-Mole", cumpliendo la totalidad de los requisitos obligatorios de programación y la gran mayoría de los de hardware de la propuesta original, con decisiones de diseño justificadas (almacenamiento en flash interna en lugar de EEPROM externa, módulo Bluetooth Low Energy en lugar de clásico, y conexión de LCD/HM-10 mediante Dupont en lugar de soldadura, documentada como desvío parcial del requisito de montaje). El sistema integra lógica de juego completa con tres niveles de dificultad, persistencia de ranking, ajuste automático de brillo por sensor de luz, display LCD, comunicación bidireccional con una aplicación móvil propia, y un modo de bajo consumo con reducción de energía cuantificada de forma consistente en los cinco escenarios de operación evaluados (Tabla 4.5).
  
 El desarrollo permitió aplicar en profundidad los conceptos de la materia — arquitectura bare metal orientada a eventos, manejo de interrupciones, PWM, ADC, comunicación serie e I2C, máquinas de estado y gestión de energía — además de enfrentar y resolver problemas reales de integración de hardware (conflictos de configuración de timers y reloj, condiciones de carrera en periféricos, fallas de soldadura) que no se manifiestan al trabajar solo a nivel de simulación o teoría.
  
-La arquitectura modular adoptada facilitó la incorporación incremental de cada subsistema sin comprometer la estabilidad de lo ya construido, resultado que se refleja en el bajo factor de uso de CPU medido (≈10.56%) y el amplio margen de memoria disponible (≈16% FLASH, ≈15% RAM) sobre la capacidad total del microcontrolador.
-
-Queda documentada como limitación del trabajo la ausencia de medición con osciloscopio (sección 4.8), por no haberse contado con acceso al instrumento durante el desarrollo.
+La arquitectura modular adoptada facilitó la incorporación incremental de cada subsistema sin comprometer la estabilidad de lo ya construido, resultado que se refleja en el bajo factor de uso de CPU medido (≈10.56%, sección 4.7) y el amplio margen de memoria disponible (≈16% FLASH, ≈15% RAM, Tabla 4.3) sobre la capacidad total del microcontrolador.
+ 
+Queda documentada como limitación del trabajo la ausencia de medición con osciloscopio y la falta de medición de consumo del LCD sobre el riel de 5V (sección 4.8), por no haberse contado con acceso al instrumento ni haberse completado esa medición durante el desarrollo.
 
 ## 5.2. Lecciones aprendidas
 - La configuración del árbol de reloj (PLL, prescalers) en el STM32F1 afecta simultáneamente a múltiples periféricos (timers, ADC) — un ajuste puntual para resolver un conflicto (ej. el prescaler del ADC) puede alterar sin querer el reloj base de otros periféricos ya calibrados (el buzzer, en este caso), por lo que conviene revisar el árbol completo tras cualquier cambio.
@@ -574,10 +666,13 @@ Se utilizó asistencia de IA (Claude, Anthropic) de forma extensiva durante el d
 1. STMicroelectronics, *UM1724 - STM32 Nucleo-64 boards user manual* (incluye documentación del jumper JP6/IDD para medición de corriente).
 2. STMicroelectronics, *STM32F103RB Datasheet*.
 3. STMicroelectronics, *RM0008 - STM32F101/102/103/105/107 Reference manual*.
-4. Datasheet del modulo HM-10, (https://www.ti.com/product/CC2541).
-5. Datasheet del expansor I2C PcF8574 https://www.ti.com/lit/ds/symlink/pcf8574.pdf.
+4. Datasheet del módulo HM-10 (chip CC2541) — Texas Instruments: https://www.ti.com/product/CC2541
+5. Datasheet del expansor I2C PCF8574 — Texas Instruments: https://www.ti.com/lit/ds/symlink/pcf8574.pdf
 6. MIT App Inventor, *BluetoothLE extension reference* — iot.appinventor.mit.edu.
-7. Repositorio del proyecto:  https://github.com/Pedro-ub/tdse-tf_2026-1erC_3-02.
+7. Juguete comercial "Whac A Mole" (Mattel) — Mercado Libre Argentina: https://juegos-juguetes.mercadolibre.com.ar/whac-a-mole-juego-para-pegarle-a-los-topos-de-mattel
+8. Aplicación móvil "Whack a Mole: Tap it!" — Google Play: https://play.google.com/store/apps/details?id=com.lcyu.whackamole
+9. Repositorio del proyecto: https://github.com/Pedro-ub/tdse-tf_2026-1erC_3-02
+
 
 ---
 
