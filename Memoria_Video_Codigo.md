@@ -57,8 +57,8 @@ A continuación, la Tabla 0.1 resume el historial de revisiones de este document
 | 1.0 | Memoria completa con mediciones de WCET, factor de uso de CPU, memoria y consumo parcial | 09/08/2026 |
 | 1.1 | Consumo completo (5 escenarios, con y sin bajo consumo), comparación con productos comerciales, tabla de requisitos ajustados, video de integración, imágenes de esquemático y placa soldada | 09/08/2026 |
 | 1.2 | Corrección de inconsistencias (numeración duplicada, contenido obsoleto), documentación honesta del uso de cables Dupont en LCD/HM-10 | 09/08/2026 |
-| 1.3 | Índice completo con subsecciones, corrección de logo roto, eliminación de contenido obsoleto remanente | 09/08/2026 |
-| 1.4 | Corrección de formato de figuras y tablas según pautas de la cátedra (epígrafes de tabla arriba, referencia previa en el texto, figuras de productos comerciales) | 09/08/2026 |
+| 1.3 | Índice completo con subsecciones, corrección de logo roto, eliminación de contenido obsoleto remanente | 11/08/2026 |
+| 1.4 | Corrección de formato de figuras y tablas según pautas de la cátedra (epígrafes de tabla arriba, referencia previa en el texto, figuras de productos comerciales) | 11/08/2026 |
  
 
 ---
