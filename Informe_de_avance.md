@@ -2,8 +2,8 @@
 ## Juego Electrónico de Reflejos y Objetivos Aleatorios
 ### Primer Informe de Avances
 
-**Autores:** Pedro Labollita, Marcos Masini, Ezequiel Robles
-**Padrones:** 112436, XXXXXXX, XXXXXXX
+**Autores:** Pedro Labollita, Marcos Masini
+**Padrones:** 112436, 110838
 **Fecha:** 13/06/2026
 **1er cuatrimestre 2026**
 

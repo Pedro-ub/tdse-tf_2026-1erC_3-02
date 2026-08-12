@@ -1,8 +1,8 @@
 # "Whack-A-Mole"
 ## Juego Electrónico de Reflejos y Objetivos Aleatorios
 
-**Autores:** Pedro Labollita, Marcos Masini, Ezequiel Robles 
-**Padrones:** 112436, XXXXXXX, XXXXXXX  
+**Autores:** Pedro Labollita, Marcos Masini 
+**Padrones:** 112436, 110838
 **Fecha:** 1er cuatrimestre 2026
 
 ---
