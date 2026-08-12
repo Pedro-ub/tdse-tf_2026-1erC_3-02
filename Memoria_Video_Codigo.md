@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./tp_embebidos/logo fiuba.png" alt="Logo FIUBA">
+  <img src="./tp_embebidos/logo-fiuba.png" alt="Logo FIUBA">
 </p>
 
 # Memoria del trabajo final: "Whack-A-Mole" — Juego Electrónico de Reflejos y Objetivos Aleatorios
@@ -92,6 +92,7 @@ A continuación, la Tabla 0.1 resume el historial de revisiones de este document
     - [3.1.8 Módulo Bluetooth HM-10](#318-módulo-bluetooth-hm-10)
     - [3.1.9. Criterio de interconexión y montaje](#319-criterio-de-interconexión-y-montaje)
     - [3.1.10. Pinout del sistema](#3110-pinout-del-sistema)
+    - [3.1.11. Circuito esquemático y cableado](#3111-circuito-esquemático-y-cableado)
   - [3.2. Firmware](#32-firmware)
     - [3.2.1 Arquitectura de ejecución](#321-arquitectura-de-ejecución)
     - [3.2.2 Scheduler y medición de tiempos](#322-scheduler-y-medición-de-tiempos)
@@ -107,13 +108,12 @@ A continuación, la Tabla 0.1 resume el historial de revisiones de este document
   - [4.1. Pruebas funcionales de hardware](#41-pruebas-funcionales-de-hardware)
   - [4.2. Pruebas funcionales de firmware](#42-pruebas-funcionales-de-firmware)
   - [4.3. Pruebas de integración](#43-pruebas-de-integración)
-  - [4.4. Circuito esquemático y cableado](#44-circuito-esquemático-y-cableado)
-  - [4.5. Console and Build Analyzer](#45-console-and-build-analyzer)
-  - [4.6. Medición y análisis de WCET por tarea](#46-medición-y-análisis-de-wcet-por-tarea)
-  - [4.7. Cálculo del factor de uso de CPU (U)](#47-cálculo-del-factor-de-uso-de-cpu-u)
-  - [4.8. Medición y análisis de consumo](#48-medición-y-análisis-de-consumo)
-  - [4.9. Gestión de bajo consumo y justificación](#49-gestión-de-bajo-consumo-y-justificación)
-  - [4.10. Cumplimiento de requisitos](#410-cumplimiento-de-requisitos)
+  - [4.4. Console and Build Analyzer](#44-console-and-build-analyzer)
+  - [4.5. Medición y análisis de WCET por tarea](#45-medición-y-análisis-de-wcet-por-tarea)
+  - [4.6. Cálculo del factor de uso de CPU (U)](#46-cálculo-del-factor-de-uso-de-cpu-u)
+  - [4.7. Medición y análisis de consumo](#47-medición-y-análisis-de-consumo)
+  - [4.8. Gestión de bajo consumo y justificación](#48-gestión-de-bajo-consumo-y-justificación)
+  - [4.9. Cumplimiento de requisitos](#49-cumplimiento-de-requisitos)
 - [Capítulo 5: Conclusiones](#capítulo-5-conclusiones)
   - [5.1. Resultados obtenidos](#51-resultados-obtenidos)
   - [5.2. Lecciones aprendidas](#52-lecciones-aprendidas)
@@ -360,13 +360,13 @@ Buzzer pasivo sobre PWM de `TIM3_CH1` (PA6), con prescaler ajustado para una bas
 Cuatro canales con pull-up interno, leídos una única vez al arrancar (requisito 5.1: configuración *inicial*): DIP0+DIP1 seleccionan dificultad inicial, DIP2 activa modo demo (arranca partida automáticamente), DIP3 fuerza modo FALLA para pruebas.Soldados directamente a la placa base.
 
 ### 3.1.6. Sensor LDR
-Divisor de tensión LDR (rama superior, hacia 3.3V) + resistencia fija de 10 kΩ (rama inferior, hacia GND), sobre `PC5`/`ADC1_IN15`. Configuración: `Continuous Conversion Mode = Disabled`, lectura por interrupción (`HAL_ADC_Start_IT`), re-armada en cada `HAL_ADC_ConvCpltCallback`. Filtro de banda (deadband) de 2% para evitar parpadeo por ruido de medición. Soldados directamente a la placa base.
+Divisor de tensión LDR (rama superior, hacia 3,3V) + resistencia fija de 10 kΩ (rama inferior, hacia GND), sobre `PC5`/`ADC1_IN15`. Configuración: `Continuous Conversion Mode = Disabled`, lectura por interrupción (`HAL_ADC_Start_IT`), re-armada en cada `HAL_ADC_ConvCpltCallback`. Filtro de banda (deadband) de 2% para evitar parpadeo por ruido de medición. Soldados directamente a la placa base.
 
 ### 3.1.7 Display LCD 1602A
 LCD 1602A con backpack I2C (PCF8574, dirección `0x27`, confirmada por barrido de bus), sobre `I2C1` sin remapeo (`PB6`=SCL, `PB7`=SDA). Alimentado a 5V. Conectado a la placa base mediante cables Dupont (ver justificación en 3.1.9), no soldado.
  
 ### 3.1.8 Módulo Bluetooth HM-10
-Módulo BLE 4.0 (chip CC2541), alimentado a 3.3V, sobre `USART1` (`PA9`=TX, `PA10`=RX, cruzado con TXD/RXD del módulo), configurado a 9600 baudios, recepción por interrupción. Conectado a la placa base mediante cables Dupont (ver justificación en 3.1.9), no soldado.
+Módulo BLE 4.0 (chip CC2541), alimentado a 3,3V, sobre `USART1` (`PA9`=TX, `PA10`=RX, cruzado con TXD/RXD del módulo), configurado a 9600 baudios, recepción por interrupción. Conectado a la placa base mediante cables Dupont (ver justificación en 3.1.9), no soldado.
 
 ### 3.1.9. Criterio de interconexión y montaje
 Placa base soldada (perfboard **doble faz**), con headers hacia los conectores Morpho de la Nucleo (montaje tipo shield), riel de GND soldado a lo largo de fila dedicada de la placa, y componentes (LEDs, botones, buzzer, DIP switch, resistencias) soldados directamente.
@@ -394,6 +394,32 @@ La asignación completa de pines utilizados en el sistema se detalla en la Tabla
 | — | 4 botones de juego (GPIO input, pull-up), soldados |
 | PC12, PC10, PB5, PB4 | 4 canales DIP switch (GPIO input, pull-up interno, switch a GND), soldados |
 
+### 3.1.11. Circuito esquemático y cableado
+
+El esquemático eléctrico completo del sistema se ilustra en la Figura 3.1.
+
+<img src="./tp_embebidos/circuito_esquematico.png" alt="Esquemático eléctrico" width="600">
+
+<em>Figura 3.1 — Esquemático eléctrico del sistema completo, mostrando el STM32 y su interconexión con LEDs, botones, buzzer, DIP switch, divisor LDR, backpack I2C del LCD y módulo HM-10.</em>
+
+El montaje físico de la placa base soldada se muestra en las Figuras 3.2 a 3.5: vista de frente, vista de atrás, montaje como shield sobre la Nucleo, y el sistema completo integrado.
+
+<img src="./tp_embebidos/frente.jpeg" alt="Vista de frente de la placa soldada" width="350">
+
+<em>Figura 3.2 — Vista de frente de la placa base soldada, con los LEDs, botones, buzzer y DIP switch visibles.</em>
+
+<img src="./tp_embebidos/atras.jpeg" alt="Vista de atrás de la placa soldada" width="350">
+
+<em>Figura 3.3 — Vista de atrás de la placa base soldada, mostrando el cableado punto a punto y los rieles de alimentación.</em>
+
+<img src="./tp_embebidos/shield.jpeg" alt="Placa montada como shield sobre la Nucleo" width="350">
+
+<em>Figura 3.4 — Placa base montada como shield sobre los conectores Morpho de la NUCLEO-F103RB.</em>
+
+<img src="./tp_embebidos/completo.jpeg" alt="Sistema completo con LCD y HM-10 conectados" width="350">
+
+<em>Figura 3.5 — Sistema completo integrado, con el display LCD y el módulo HM-10 conectados vía cables Dupont (ver justificación en 3.1.9).</em>
+
 ## 3.2. Firmware
 
 
@@ -404,7 +430,7 @@ Bare metal, Event-Triggered System. Super-loop en `main()` con `schedulerUpdate(
 `task_scheduler.c` ejecuta 9 tareas cada 1 ms (`appUpdate`, `buttonUpdate`, `buzzerUpdate`, `dipSwitchUpdate`, `gameUpdate`, `menuUpdate`, `ldrUpdate`, `bluetoothUpdate`, `lcdUpdate`), instrumentadas con `DWT->CYCCNT` para registrar tanto el WCET como un promedio móvil exponencial (`avgCycles`) por tarea (ver Capítulo 4).
  
 ### 3.2.3 Máquina de estados principal
-`fsm.c` implementa la FSM global mediante un array de estructuras `{estado, evento, acción, próximo_estado}` (requisito 10.4), con transiciones globales (comodín `FSM_ANY_STATE`) para fallas de hardware. El diagrama de estados se ilustra en la Figura 3.1.
+`fsm.c` implementa la FSM global mediante un array de estructuras `{estado, evento, acción, próximo_estado}` (requisito 10.4), con transiciones globales (comodín `FSM_ANY_STATE`) para fallas de hardware. El diagrama de estados se ilustra en la Figura 3.6.
  
 ```mermaid
 stateDiagram-v2
@@ -417,7 +443,7 @@ stateDiagram-v2
     FAULT --> SETUP: EVENT_BT_DATA_RX
 ```
  
-<em>Figura 3.1 — Diagrama de estados de la FSM principal: INIT transiciona una única vez a SETUP; desde SETUP se pasa a NORMAL al iniciar una partida; desde NORMAL se vuelve a SETUP al finalizar la partida; una falla de hardware (EVENT_HW_FAULT) lleva a FAULT desde cualquier estado; desde FAULT se retorna a SETUP ante la recepción de datos por Bluetooth.</em>
+<em>Figura 3.6 — Diagrama de estados de la FSM principal: INIT transiciona una única vez a SETUP; desde SETUP se pasa a NORMAL al iniciar una partida; desde NORMAL se vuelve a SETUP al finalizar la partida; una falla de hardware (EVENT_HW_FAULT) lleva a FAULT desde cualquier estado; desde FAULT se retorna a SETUP ante la recepción de datos por Bluetooth.</em>
  
 ### 3.2.4 Módulo de juego
 `game.c`: selección aleatoria de objetivo (`random.c`, xorshift32 resembrado con el tiempo real de reacción del jugador en cada acierto), timeout decreciente por dificultad (tabla `difficultyTable[]`), conteo de vidas y score, transmisión del score final por Bluetooth y persistencia en flash al finalizar.
@@ -455,7 +481,7 @@ Los ensayos funcionales de hardware realizados sobre el sistema completo se resu
 | Ensayo | Resultado | Estado |
 |---|---|:---:|
 | Continuidad de cableado (protoboard y placa soldada) | Validado progresivamente por subsistema | ✅ |
-| Botones (antirrebote, pull-up) | Confirmado con multímetro (~3.3V reposo / ~0V presionado) | ✅ |
+| Botones (antirrebote, pull-up) | Confirmado con multímetro (~3,3V reposo / ~0V presionado) | ✅ |
 | LEDs con PWM (3 timers distintos, sin conflicto con buzzer) | Confirmado tras resolver conflicto inicial de TIM3 compartido | ✅ |
 | Divisor de tensión LDR (sentido de lectura) | Confirmado con multímetro (tapado vs. iluminado) | ✅ |
 | Bus I2C (LCD) | Confirmado backlight y caracteres, tras resolver contacto mecánico del backpack | ✅ |
@@ -482,33 +508,7 @@ Los ensayos funcionales de firmware realizados se resumen en la Tabla 4.2.
 ## 4.3. Pruebas de integración
 Video de integración del sistema completo funcionando: https://youtu.be/2-QbApDpVpc?feature=shared
 
-## 4.4. Circuito esquemático y cableado
-El esquemático eléctrico completo del sistema se ilustra en la Figura 4.1.
- 
-![Esquemático eléctrico](./tp_embebidos/circuito_esquematico.png)
- 
-<em>Figura 4.1 — Esquemático eléctrico del sistema completo, mostrando el STM32 y su interconexión con LEDs, botones, buzzer, DIP switch, divisor LDR, backpack I2C del LCD y módulo HM-10.</em>
- 
-El montaje físico de la placa base soldada se muestra en las Figuras 4.2 a 4.5: vista de frente, vista de atrás, montaje como shield sobre la Nucleo, y el sistema completo integrado.
- 
-![Vista de frente de la placa soldada](./tp_embebidos/frente.jpeg)
- 
-<em>Figura 4.2 — Vista de frente de la placa base soldada, con los LEDs, botones, buzzer y DIP switch visibles.</em>
- 
-![Vista de atrás de la placa soldada](./tp_embebidos/atras.jpeg)
- 
-<em>Figura 4.3 — Vista de atrás de la placa base soldada, mostrando el cableado punto a punto y los rieles de alimentación.</em>
- 
-![Placa montada como shield sobre la Nucleo](./tp_embebidos/shield.jpeg)
- 
-<em>Figura 4.4 — Placa base montada como shield sobre los conectores Morpho de la NUCLEO-F103RB.</em>
- 
-![Sistema completo con LCD y HM-10 conectados](./tp_embebidos/completo.jpeg)
- 
-<em>Figura 4.5 — Sistema completo integrado, con el display LCD y el módulo HM-10 conectados vía cables Dupont (ver justificación en 3.1.9).</em>
- 
-
-## 4.5. Console and Build Analyzer
+## 4.4. Console and Build Analyzer
 
 El uso de memoria del build final (STM32F103RB: 128 KB FLASH, 20 KB RAM) se detalla por sección en la Tabla 4.3.
  
@@ -517,15 +517,15 @@ El uso de memoria del build final (STM32F103RB: 128 KB FLASH, 20 KB RAM) se deta
 | Sección | Tamaño |
 |---|---:|
 | `.isr_vector` | 268 B |
-| `.text` | 19.23 KB |
+| `.text` | 19,23 KB |
 | `.rodata` | 764 B |
 | `.data` | 288 B |
-| `.bss` | 1.23 KB |
-| `._user_heap_stack` | 1.5 KB |
+| `.bss` | 1,23 KB |
+| `._user_heap_stack` | 1,5 KB |
  
-A partir de estos valores: **FLASH usada** ≈20.53 KB de 128 KB (**16.04%**); **RAM usada** ≈3.01 KB de 20 KB (**15.05%**). Se observa un uso bajo de ambos recursos, dejando amplio margen para futuras extensiones — resultado comparable en magnitud al reportado por proyectos de referencia de la cátedra con alcance similar.
+A partir de estos valores: **FLASH usada** ≈20,53 KB de 128 KB (**16,04%**); **RAM usada** ≈3,01 KB de 20 KB (**15,05%**). Se observa un uso bajo de ambos recursos, dejando amplio margen para futuras extensiones — resultado comparable en magnitud al reportado por proyectos de referencia de la cátedra con alcance similar.
 
-## 4.6. Medición y análisis de WCET por tarea
+## 4.5. Medición y análisis de WCET por tarea
 
 Instrumentación mediante `DWT->CYCCNT` (contador de ciclos del núcleo), habilitado una vez en `schedulerInit()` (`CoreDebug->DEMCR` + `DWT->CTRL`). Cada tarea del scheduler mide su tiempo de ejecución en cada invocación, actualizando tanto el peor caso observado (WCET) como un promedio móvil exponencial (`Cavg`, ponderación 1/8 por muestra). Mediciones realizadas jugando partidas completas por las 3 dificultades, navegando el menú, cambiando dificultad por los 3 medios disponibles (menú, DIP switch, Bluetooth) y ejercitando el submenú de ranking, con el reloj de sistema confirmado en 64 MHz. Los resultados se resumen en la Tabla 4.4.
  
@@ -533,15 +533,15 @@ Instrumentación mediante `DWT->CYCCNT` (contador de ciclos del núcleo), habili
  
 | Tarea | Cavg típico [µs] | WCET máx. observado [µs] |
 |---|---:|---:|
-| `appUpdate` | 7.2 | 228,305 (evento único de arranque) |
-| `buttonUpdate` | 30.1 | 47.4 |
-| `buzzerUpdate` | 5.6 | 23.6 |
-| `dipSwitchUpdate` | 28.2 | 34.5 |
-| `gameUpdate` | 5.7 | 31,205 |
-| `menuUpdate` | 12.9 | 109,180 |
-| `ldrUpdate` | 5.9 | 23.5 |
-| `bluetoothUpdate` | 4.7 | 110,117 |
-| `lcdUpdate` | 5.3 | 59,112 |
+| `appUpdate` | 7,2 | 228,305 (evento único de arranque) |
+| `buttonUpdate` | 30,1 | 47,4 |
+| `buzzerUpdate` | 5,6 | 23,6 |
+| `dipSwitchUpdate` | 28,2 | 34,5 |
+| `gameUpdate` | 5,7 | 31,205 |
+| `menuUpdate` | 12,9 | 109,180 |
+| `ldrUpdate` | 5,9 | 23,5 |
+| `bluetoothUpdate` | 4,7 | 110,117 |
+| `lcdUpdate` | 5,3 | 59,112 |
  
 **Observaciones:**
  
@@ -549,50 +549,50 @@ Instrumentación mediante `DWT->CYCCNT` (contador de ciclos del núcleo), habili
 - Los picos de `gameUpdate`, `menuUpdate`, `bluetoothUpdate` y `lcdUpdate` (decenas a más de 100 ms) corresponden a operaciones puntuales inherentemente bloqueantes por el propio hardware: borrado/escritura de página de flash interna (fin de partida, cambio de dificultad, reset de ranking) y esperas fijas del protocolo HD44780 al actualizar el LCD. Estas operaciones ocurren únicamente ante eventos discretos del usuario, no en cada tick, y representan una desviación reconocida respecto del ideal de "todas las tareas no bloqueantes" (requisito 10.3), documentada aquí como limitación conocida del diseño.
 - Los tiempos de `buttonUpdate` y `dipSwitchUpdate` en `Cavg` (≈28-30 µs) resultaron significativamente menores tras compilar con optimización activada, frente a mediciones preliminares con optimización deshabilitada (`-O0`), que llegaban a ≈417 µs para las mismas tareas.
 
-## 4.7. Cálculo del factor de uso de CPU (U)
+## 4.6. Cálculo del factor de uso de CPU (U)
 $$U = \sum_{i=1}^{n} \frac{C_i}{T_i}$$
  
 Con período `T_i = 1000 µs` para las 9 tareas (todas registradas cada 1 ms):
  
 **Usando Cavg (caso típico de operación):**
  
-$$U_{avg} = \frac{7.2+30.1+5.6+28.2+5.7+12.9+5.9+4.7+5.3}{1000} ≈ 0.1056 → \mathbf{10.56\%}$$
+$$U_{avg} = \frac{7,2+30,1+5,6+28,2+5,7+12,9+5,9+4,7+5,3}{1000} ≈ 0,1056 → \mathbf{10,56\%}$$
  
 **Usando WCET (cota conservadora):** la suma directa de los picos individuales (excluyendo el evento único de arranque) supera ampliamente el período de 1 ms — esto **no** representa un peor caso simultáneo real, sino la suma de eventos que estadísticamente casi nunca coinciden en el mismo tick (una escritura en flash y una actualización del LCD disparadas por el mismo evento son la excepción, no la norma). Se reporta como cota conservadora no realista, en línea con el criterio usado en proyectos de referencia de la cátedra.
  
-El valor de operación típica (**≈10.56%**) indica un sistema con amplio margen temporal respecto al límite de 1 ms por vuelta de super-loop (requisito 10.1), consistente con el bajo uso de CPU esperable para una arquitectura orientada a periféricos de baja frecuencia de actualización (juego de reflejos, sensores ambientales, comunicación esporádica).
+El valor de operación típica (**≈10,56%**) indica un sistema con amplio margen temporal respecto al límite de 1 ms por vuelta de super-loop (requisito 10.1), consistente con el bajo uso de CPU esperable para una arquitectura orientada a periféricos de baja frecuencia de actualización (juego de reflejos, sensores ambientales, comunicación esporádica).
 
 
-## 4.8. Medición y análisis de consumo
-**Metodología:** medición de corriente mediante jumper `JP6 (IDD)` de la NUCLEO-F103RB — punto específico entre el regulador de 3.3V y la alimentación del STM32, documentado en el manual UM1724 para este propósito — con multímetro en modo amperímetro intercalado en el jumper. No se realizó medición sobre el riel de 5V, dado que ningún componente del circuito lo utiliza (ver nota en 3.1.8). No se contó con acceso a un osciloscopio durante el desarrollo del trabajo, por lo que la medición de consumo se limitó a valores de corriente promedio/pico con multímetro; queda como trabajo pendiente la caracterización de la forma de onda de consumo (picos transitorios de corta duración, ej. al conmutar PWM o durante transmisiones Bluetooth puntuales) que solo un osciloscopio permite observar.
+## 4.7. Medición y análisis de consumo
+**Metodología:** medición de corriente mediante jumper `JP6 (IDD)` de la NUCLEO-F103RB — punto específico entre el regulador de 3,3V y la alimentación del STM32, documentado en el manual UM1724 para este propósito — con multímetro en modo amperímetro intercalado en el jumper. No se realizó medición sobre el riel de 5V, dado que ningún componente del circuito lo utiliza (ver nota en 3.1.8). No se contó con acceso a un osciloscopio durante el desarrollo del trabajo, por lo que la medición de consumo se limitó a valores de corriente promedio/pico con multímetro; queda como trabajo pendiente la caracterización de la forma de onda de consumo (picos transitorios de corta duración, ej. al conmutar PWM o durante transmisiones Bluetooth puntuales) que solo un osciloscopio permite observar.
  
 Se midieron 5 escenarios de operación, cada uno con y sin el modo de bajo consumo activo (comentando/descomentando `lowPowerEnterIdle()` en el super-loop). Los resultados se resumen en la Tabla 4.5.
  
-<em>Tabla 4.5 — Consumo medido en los 5 escenarios de operación evaluados, con y sin modo de bajo consumo, sobre el riel de 3.3V.</em>
+<em>Tabla 4.5 — Consumo medido en los 5 escenarios de operación evaluados, con y sin modo de bajo consumo, sobre el riel de 3,3V.</em>
  
 | Modo | Con low power | Sin low power | Reducción |
 |---|---:|---:|---:|
-| SET_UP, en reposo (menú) | 36.4 mA | 38.4 mA | 2.0 mA |
-| NORMAL, jugando activamente | 38.1 mA | 40.1 mA | 2.0 mA |
-| SET_UP + Bluetooth conectado (sin transmitir) | 43.3 mA | 45.5 mA | 2.2 mA |
-| NORMAL + Bluetooth transmitiendo activamente | 44.1 mA | 46.1 mA | 2.0 mA |
-| FALLA (buzzer + LEDs activos) | 42.0 mA | 44.3 mA | 2.3 mA |
+| SET_UP, en reposo (menú) | 36,4 mA | 38,4 mA | 2,0 mA |
+| NORMAL, jugando activamente | 38,1 mA | 40,1 mA | 2,0 mA |
+| SET_UP + Bluetooth conectado (sin transmitir) | 43,3 mA | 45,5 mA | 2,2 mA |
+| NORMAL + Bluetooth transmitiendo activamente | 44,1 mA | 46,1 mA | 2,0 mA |
+| FALLA (buzzer + LEDs activos) | 42,0 mA | 44,3 mA | 2,3 mA |
 
 **Análisis:**
  
-- El peor caso medido fue **46.1 mA** (modo NORMAL con Bluetooth transmitiendo, sin bajo consumo), muy por debajo de los límites de corriente típicos del regulador de la placa de desarrollo.
+- El peor caso medido fue **46,1 mA** (modo NORMAL con Bluetooth transmitiendo, sin bajo consumo), muy por debajo de los límites de corriente típicos del regulador de la placa de desarrollo.
 - El módulo Bluetooth es la variable de mayor impacto sobre el consumo total: conectarlo agrega entre ~7-9 mA sobre el baseline, muy por encima del efecto de cualquier otro periférico individual — patrón consistente con lo observado en proyectos de referencia de la cátedra que también incorporan Bluetooth.
-- La diferencia entre Bluetooth "conectado sin transmitir" y "transmitiendo activamente" es pequeña (≈0.6-0.8 mA), consistente con el comportamiento esperado de un enlace BLE ya establecido.
-- El modo de bajo consumo (Sleep) redujo el consumo entre **2.0 y 2.3 mA de forma consistente** en los 5 escenarios evaluados, independientemente de cuánto estuviera trabajando el resto del sistema. Esta consistencia se explica porque Sleep actúa exclusivamente sobre el reloj del núcleo del CPU (que representa una fracción acotada y relativamente estable del consumo total, coherente con el factor de uso de CPU medido en 4.7, ≈10.56%), mientras que el consumo dominante proviene de periféricos (LEDs, buzzer, LCD, HM-10) que permanecen activos en ambos casos.
+- La diferencia entre Bluetooth "conectado sin transmitir" y "transmitiendo activamente" es pequeña (≈0,6-0,8 mA), consistente con el comportamiento esperado de un enlace BLE ya establecido.
+- El modo de bajo consumo (Sleep) redujo el consumo entre **2,0 y 2,3 mA de forma consistente** en los 5 escenarios evaluados, independientemente de cuánto estuviera trabajando el resto del sistema. Esta consistencia se explica porque Sleep actúa exclusivamente sobre el reloj del núcleo del CPU (que representa una fracción acotada y relativamente estable del consumo total, coherente con el factor de uso de CPU medido en 4.7, ≈10,56%), mientras que el consumo dominante proviene de periféricos (LEDs, buzzer, LCD, HM-10) que permanecen activos en ambos casos.
 
 
-## 4.9. Gestión de bajo consumo y justificación
+## 4.8. Gestión de bajo consumo y justificación
  
 El sistema implementa modo **Sleep** (`HAL_PWR_EnterSLEEPMode`, instrucción `WFI`) al final de cada vuelta del super-loop. A diferencia del modo Stop, Sleep detiene únicamente el reloj del núcleo del CPU, dejando activos todos los periféricos (timers de PWM, ADC, I2C, UART) — se despierta automáticamente ante cualquier interrupción, incluido el propio SysTick de 1 ms, sin requerir reconfiguración de las entradas por polling (botones, DIP switch) como líneas EXTI.
  
-Dado que el `schedulerUpdate()` tarda, en operación típica, una fracción mínima del período de 1 ms disponible (factor de uso ≈10.56%, sección 4.7), el núcleo permanece en Sleep la gran mayoría de cada ciclo. La medición de la sección 4.8 confirma una reducción real y consistente de **2.0 a 2.3 mA** en los 5 escenarios evaluados, sin alterar la respuesta percibida por el usuario (botones, LEDs y menú responden con igual fluidez con y sin el modo activo).
+Dado que el `schedulerUpdate()` tarda, en operación típica, una fracción mínima del período de 1 ms disponible (factor de uso ≈10,56%, sección 4.7), el núcleo permanece en Sleep la gran mayoría de cada ciclo. La medición de la sección 4.8 confirma una reducción real y consistente de **2,0 a 2,3 mA** en los 5 escenarios evaluados, sin alterar la respuesta percibida por el usuario (botones, LEDs y menú responden con igual fluidez con y sin el modo activo).
 
-## 4.10. Cumplimiento de requisitos
+## 4.9. Cumplimiento de requisitos
 
 El grado de cumplimiento de cada requisito, discriminado por grupo, se resume en la Tabla 4.6.
  
@@ -630,7 +630,7 @@ Se logró un prototipo funcional completo del sistema "Whack-A-Mole", cumpliendo
  
 El desarrollo permitió aplicar en profundidad los conceptos de la materia — arquitectura bare metal orientada a eventos, manejo de interrupciones, PWM, ADC, comunicación serie e I2C, máquinas de estado y gestión de energía — además de enfrentar y resolver problemas reales de integración de hardware (conflictos de configuración de timers y reloj, condiciones de carrera en periféricos, fallas de soldadura) que no se manifiestan al trabajar solo a nivel de simulación o teoría.
  
-La arquitectura modular adoptada facilitó la incorporación incremental de cada subsistema sin comprometer la estabilidad de lo ya construido, resultado que se refleja en el bajo factor de uso de CPU medido (≈10.56%, sección 4.7) y el amplio margen de memoria disponible (≈16% FLASH, ≈15% RAM, Tabla 4.3) sobre la capacidad total del microcontrolador.
+La arquitectura modular adoptada facilitó la incorporación incremental de cada subsistema sin comprometer la estabilidad de lo ya construido, resultado que se refleja en el bajo factor de uso de CPU medido (≈10,56%, sección 4.7) y el amplio margen de memoria disponible (≈16% FLASH, ≈15% RAM, Tabla 4.3) sobre la capacidad total del microcontrolador.
  
 Queda documentada como limitación del trabajo la ausencia de medición con osciloscopio y la falta de medición de consumo del LCD sobre el riel de 5V (sección 4.8), por no haberse contado con acceso al instrumento ni haberse completado esa medición durante el desarrollo.
 
